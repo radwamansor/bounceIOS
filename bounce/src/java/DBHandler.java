@@ -29,20 +29,48 @@ public class DBHandler {
         }
     }
 
-    public ArrayList<Player> getPlayers(){
-        ArrayList<Player> players=new ArrayList<>();
+    public ArrayList<Player> getPlayers() {
+        ArrayList<Player> players = new ArrayList<>();
         try {
-            ResultSet rs=con.createStatement().executeQuery("select * from user order by score desc");
+            ResultSet rs = con.createStatement().executeQuery("select * from user order by score desc");
             System.out.println("yyy");
-            while(rs.next()){
-                Player p=new Player(rs.getString("user_name"), null, rs.getInt("score"), rs.getString("image"));
+            while (rs.next()) {
+                Player p = new Player(rs.getString("user_name"), null, rs.getInt("score"), rs.getString("image"));
                 System.out.println(rs.getString("user_name"));
                 players.add(p);
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
         return players;
+    }
+
+    boolean checkUser(String userName, String pass) {
+        try {
+            ResultSet rs = con.createStatement().executeQuery("select * from user where user_name like '" + userName + "' and pass like '" + pass + "'");
+            if (rs.first()) {
+                return true;
+            } else {
+                return false;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    Player getPlayerInfo(String userName) {
+        Player player = null;
+        try {
+            ResultSet rs = con.createStatement().executeQuery("select * from user where user_name like '" + userName + "'");
+            if (rs.first()) {
+                player = new Player(rs.getString("user_name"), rs.getString("pass"), rs.getInt("score"), rs.getString("image"));
+
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return player;
     }
 }
