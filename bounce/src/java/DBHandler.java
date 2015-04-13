@@ -73,4 +73,19 @@ public class DBHandler {
         }
         return player;
     }
+    boolean updatePlayerInfo(String userName,String name, String score)
+    {
+         String query ="\"update user set score= '100' , name='shimaa' where userName='" + userName + "'";
+         try
+         {
+        ResultSet rs= con.createStatement().executeQuery(query);
+        return true;
+         }
+         
+         catch (SQLException ex) {
+            Logger.getLogger(DBHandler.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            return false;
+        }
+    }
 }
